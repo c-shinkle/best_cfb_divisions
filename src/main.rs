@@ -1,144 +1,67 @@
-use itertools::Itertools;
-use std::collections::HashMap;
-use std::iter::zip;
+use reqwest::blocking::Client;
+use serde_json::Value;
+use std::fs::File;
+use std::io::prelude::*;
 
-type Conference = [&'static str];
-type Division = Vec<&'static str>;
-type TeamPair = (&'static str, &'static str);
-type DivisionPair = (Division, Division);
+use lib::find_closest_divisions;
+use lib::generate_all_pair_combinations;
 
-macro_rules! collection {
-    // map-like
-    ($($k:expr => $v:expr),* $(,)?) => {{
-        core::convert::From::from([$(($k, $v),)*])
-    }};
-}
+mod lib;
 
 fn main() {
-    let conference = [
-        "Kansas State",
-        "Central Florida",
-        "Iowa State",
-        "Cincinnati",
-        "Kansas",
-        "Houston",
+    find_closest_divisions();
+    let stadium_names = [
+        "Brigham Young University Stadium",
+        "Iowa State University Stadium",
+        "Kansas State University Stadium",
+        "Oklahoma State University Stadium",
+        "Texas Christian University Stadium",
+        "Texas Tech University Stadium",
+        "University of Baylor Stadium",
+        "University of Central Florida Stadium",
+        "University of Cincinnati Stadium",
+        "University of Houston Stadium",
+        "University of Kansas Stadium",
+        "University of West Virginia Stadium",
     ];
-    let all_divisions_pairs = generate_all_conferences(&conference);
-    let lookup_table = create_lookup_table();
-    let (min, (first, second)) =
-        get_min_distance_and_division_pair(&all_divisions_pairs, &lookup_table);
-    println!("The min average distance is: {} miles", min);
-    print_divisions(first, second);
-}
 
-fn generate_all_conferences(conference: &Conference) -> Vec<DivisionPair> {
-    let first_half = generate_first_half_divisions(conference);
-    let second_half = first_half
-        .iter()
-        .map(|division| generate_complimentary_division(division, conference))
-        .collect::<Vec<Division>>();
-    zip(first_half, second_half)
-        .map(|(first, second)| (first, second))
-        .collect::<Vec<(Division, Division)>>()
-}
+    let client = Client::new();
+    let mut file = File::create("output.txt").expect("creating file failed!");
 
-fn generate_first_half_divisions(conference: &Conference) -> Vec<Division> {
-    conference
-        .iter()
-        .tuple_combinations::<(&&str, &&str, &&str)>()
-        .map(|(a, b, c)| vec![*a, *b, *c])
-        .collect()
-}
+    for (origin, destination) in generate_all_pair_combinations(&stadium_names) {
+        let params = [
+            ("outputFormat", "json"),
+            ("origin", origin),
+            ("destination", destination),
+            ("key", "<key>"),
+        ];
+        let request = client
+            .get("https://maps.googleapis.com/maps/api/directions/json")
+            .query(&params)
+            .send()
+            .expect("The web client failed!");
 
-fn generate_complimentary_division(division: &Division, conference: &Conference) -> Division {
-    let compliment = conference
-        .iter()
-        .filter(|team| !division.contains(team))
-        .copied()
-        .collect::<Vec<&str>>();
+        let json = request.text().expect("The json failed!");
 
-    vec![compliment[0], compliment[1], compliment[2]]
-}
-
-fn create_lookup_table() -> HashMap<TeamPair, u32> {
-    collection! {
-        ("Central Florida", "Cincinnati") => 917,
-        ("Central Florida", "Houston") => 981,
-        ("Central Florida", "Iowa State") => 1377,
-        ("Central Florida", "Kansas State") => 1378,
-        ("Central Florida", "Kansas") => 1294,
-        ("Cincinnati", "Houston") => 1054,
-        ("Cincinnati", "Iowa State") => 598,
-        ("Cincinnati", "Kansas State") => 712,
-        ("Cincinnati", "Kansas") => 628,
-        ("Houston", "Iowa State") => 973,
-        ("Houston", "Kansas State") => 739,
-        ("Houston", "Kansas") => 732,
-        ("Iowa State", "Kansas State") => 333,
-        ("Iowa State", "Kansas") => 267,
-        ("Kansas State", "Kansas") => 87,
+        let value = serde_json::from_str::<Value>(&json).expect("serde_json failed!");
+        let routes = value["routes"].as_array().unwrap();
+        let route = routes[0].as_object().unwrap();
+        let legs = route.get("legs").unwrap().as_array().unwrap();
+        let leg = legs[0].as_object().unwrap();
+        let distance = leg.get("distance").unwrap();
+        let text = distance.get("text").unwrap();
+        let miles_string = text.to_string();
+        let miles_token = miles_string.trim_matches('"').split(' ').next().unwrap();
+        println!(
+            "The distance from {} to {} is {} miles!",
+            origin, destination, miles_token
+        );
+        //("Central Florida", "Cincinnati") => 917,
+        let temp = format!(
+            "(\"{}\", \"{}\") => {},\n",
+            origin, destination, miles_token
+        );
+        file.write_all(temp.as_bytes())
+            .expect("file writing failed!");
     }
 }
-
-fn get_min_distance_and_division_pair<'a>(
-    all_divisions_pairs: &'a [DivisionPair],
-    lookup_table: &HashMap<TeamPair, u32>,
-) -> (f64, (&'a Division, &'a Division)) {
-    all_divisions_pairs.iter().fold(
-        (
-            f64::INFINITY,
-            (&all_divisions_pairs[0].0, &all_divisions_pairs[0].1),
-        ),
-        |min_so_far, division_pair| {
-            let (first, second) = division_pair;
-            let length = (first.len() + second.len()) as u32;
-            let first_sum = sum_division_dist(first, lookup_table);
-            let second_sum = sum_division_dist(second, lookup_table);
-            let current_min = (first_sum + second_sum) / f64::from(length);
-            if current_min < min_so_far.0 {
-                println!("New min found!");
-                print_divisions(first, second);
-                (current_min, (first, second))
-            } else {
-                min_so_far
-            }
-        },
-    )
-}
-
-fn sum_division_dist(division: &Division, lookup_table: &HashMap<TeamPair, u32>) -> f64 {
-    let sum: u32 = division
-        .iter()
-        .tuple_combinations::<(&&str, &&str)>()
-        .map(|(a, b)| {
-            *lookup_table
-                .get(&(a, b))
-                .or_else(|| lookup_table.get(&(b, a)))
-                .unwrap()
-        })
-        .sum();
-    f64::from(sum)
-}
-
-fn print_divisions(first: &Division, second: &Division) {
-    print!("First Division: ");
-    print!("{}, ", first[0]);
-    print!("{}, ", first[1]);
-    print!("{}", first[2]);
-    println!();
-    print!("Second Division: ");
-    print!("{}, ", second[0]);
-    print!("{}, ", second[1]);
-    print!("{}", second[2]);
-    println!();
-}
-
-/*
-fn generate_all_pair_combinations(conference: &Conference) -> Vec<Pair> {
-    conference
-        .iter()
-        .tuple_combinations::<(_, _)>()
-        .map(|(a, b)| (*a, *b))
-        .collect()
-}
- */
