@@ -1,15 +1,32 @@
+use std::cmp::{Ordering, Reverse};
+use std::collections::BinaryHeap;
 use std::collections::HashMap;
-use std::fs::File;
-use std::io::Write;
 use std::iter::zip;
 
 use itertools::Itertools;
-use reqwest::blocking::Client;
-use serde_json::Value;
 
 type Conference = [&'static str];
 type Division = Vec<&'static str>;
 type TeamPair = (&'static str, &'static str);
+
+#[derive(Eq, PartialEq)]
+struct DivisionDistance<'a> {
+    dist: u32,
+    first: &'a Division,
+    second: &'a Division,
+}
+
+impl<'a> PartialOrd for DivisionDistance<'a> {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        self.dist.partial_cmp(&other.dist)
+    }
+}
+
+impl<'a> Ord for DivisionDistance<'a> {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.dist.cmp(&other.dist)
+    }
+}
 
 macro_rules! collection {
     // map-like
@@ -112,34 +129,34 @@ pub fn find_closest_divisions(conference: &Conference) {
         .collect::<Vec<(Division, Division)>>();
 
     let lookup_table = create_lookup_table();
-    let (min, (first, second)) =
-        all_divisions_pairs.iter().fold(
-            (
-                f64::INFINITY,
-                (&all_divisions_pairs[0].0, &all_divisions_pairs[0].1),
-            ),
-            |min_so_far, division_pair| {
-                let (first, second) = division_pair;
-                let length = (first.len() + second.len()) as u32;
-                let first_sum = sum_division_dist(first, &lookup_table);
-                let second_sum = sum_division_dist(second, &lookup_table);
-                let current_min = (first_sum + second_sum) / f64::from(length);
-                if current_min < min_so_far.0 {
-                    println!("New min found! {} miles", current_min as u32);
-                    print_divisions(first, second);
-                    (current_min, (first, second))
-                } else {
-                    min_so_far
-                }
-            },
-        );
 
-    println!("The min average distance is: {} miles", min as u32);
-    print_divisions(first, second);
+    let mut priority_queue = BinaryHeap::new();
+
+    for (first, second) in all_divisions_pairs.iter() {
+        let first_sum = sum_division_dist(first, &lookup_table);
+        let second_sum = sum_division_dist(second, &lookup_table);
+        let length = conference.len() as u32;
+        let dist = (first_sum + second_sum) / length;
+        priority_queue.push(DivisionDistance {
+            dist,
+            first,
+            second,
+        });
+    }
+
+    while !priority_queue.is_empty() {
+        let DivisionDistance {
+            dist,
+            first,
+            second,
+        } = priority_queue.pop().unwrap();
+        println!("Distance: {}", dist);
+        print_divisions(first, second);
+    }
 }
 
-fn sum_division_dist(division: &Division, lookup_table: &HashMap<TeamPair, u32>) -> f64 {
-    let sum = division
+fn sum_division_dist(division: &Division, lookup_table: &HashMap<TeamPair, u32>) -> u32 {
+    division
         .iter()
         .tuple_combinations::<(&&str, &&str)>()
         .map(|(a, b)| {
@@ -148,8 +165,7 @@ fn sum_division_dist(division: &Division, lookup_table: &HashMap<TeamPair, u32>)
                 .or_else(|| lookup_table.get(&(b, a)))
                 .unwrap()
         })
-        .sum::<u32>();
-    f64::from(sum)
+        .sum()
 }
 
 fn print_divisions(first: &Division, second: &Division) {
@@ -162,10 +178,9 @@ fn print_divisions(first: &Division, second: &Division) {
     for d in second {
         print!("{}, ", d);
     }
-    println!();
-    println!();
+    print!("\n\n");
 }
-
+/*
 pub fn write_all_stadium_distance_pairs_to_file(stadium_names: &[&'static str]) {
     let client = Client::new();
     let mut file = File::create("output.txt").expect("creating file failed!");
@@ -223,3 +238,4 @@ pub fn write_all_stadium_distance_pairs_to_file(stadium_names: &[&'static str]) 
             .expect("file writing failed!");
     }
 }
+ */
