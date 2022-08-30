@@ -1,6 +1,6 @@
-use std::collections::BinaryHeap;
 use std::collections::HashMap;
 use std::iter::zip;
+use std::mem::size_of;
 
 use itertools::Itertools;
 
@@ -8,7 +8,7 @@ type Conference = [&'static str];
 type Division = Vec<&'static str>;
 type TeamPair = (&'static str, &'static str);
 
-#[derive(Eq, Ord, PartialEq, PartialOrd )]
+#[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
 struct DivisionDistance<'a> {
     dist: u32,
     first: &'a Division,
@@ -117,23 +117,24 @@ pub fn find_closest_divisions(conference: &Conference) {
 
     let lookup_table = create_lookup_table();
 
-    let mut priority_queue = BinaryHeap::new();
+    let mut all_distances =
+        Vec::with_capacity(all_divisions_pairs.len() * size_of::<DivisionDistance>());
 
     for (first, second) in all_divisions_pairs.iter() {
         let first_sum = sum_division_dist(first, &lookup_table);
         let second_sum = sum_division_dist(second, &lookup_table);
         let length = conference.len() as u32;
         let dist = (first_sum + second_sum) / length;
-        priority_queue.push(DivisionDistance {
+        all_distances.push(DivisionDistance {
             dist,
             first,
             second,
         });
     }
 
-    while !priority_queue.is_empty() {
-        print_divisions(priority_queue.pop().unwrap());
-        priority_queue.pop();
+    all_distances.sort();
+    for i in (0..all_distances.len()).step_by(2) {
+        print_divisions(all_distances[i]);
     }
 }
 
