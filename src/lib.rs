@@ -1,31 +1,18 @@
-use std::cmp::Ordering;
+use std::collections::BinaryHeap;
 use std::collections::HashMap;
-use std::collections::{BinaryHeap, HashSet};
 use std::iter::zip;
 
 use itertools::Itertools;
 
 type Conference = [&'static str];
-type Division = HashSet<&'static str>;
+type Division = Vec<&'static str>;
 type TeamPair = (&'static str, &'static str);
 
-#[derive(Eq, PartialEq)]
+#[derive(Eq, Ord, PartialEq, PartialOrd )]
 struct DivisionDistance<'a> {
     dist: u32,
     first: &'a Division,
     second: &'a Division,
-}
-
-impl<'a> PartialOrd for DivisionDistance<'a> {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        self.dist.partial_cmp(&other.dist)
-    }
-}
-
-impl<'a> Ord for DivisionDistance<'a> {
-    fn cmp(&self, other: &Self) -> Ordering {
-        self.dist.cmp(&other.dist)
-    }
 }
 
 macro_rules! collection {
@@ -107,31 +94,20 @@ fn create_lookup_table() -> HashMap<TeamPair, u32> {
 }
 
 pub fn find_closest_divisions(conference: &Conference) {
-    let all_division_combos = conference
+    let first_half = conference
         .iter()
         .combinations(conference.len() / 2)
         .map(|combos| combos.iter().map(|s| **s).collect::<Division>())
         .collect::<Vec<Division>>();
-
-    let mut first_half = Vec::<Division>::with_capacity(all_division_combos.len() / 2);
-
-    for some_division in all_division_combos {
-        let is_division_new = !first_half
-            .iter()
-            .any(|already_division| already_division.is_disjoint(&some_division));
-        if is_division_new {
-            first_half.push(some_division);
-        }
-    }
 
     let second_half = first_half
         .iter()
         .map(|division| {
             conference
                 .iter()
-                .filter(|team| !division.contains(**team))
+                .filter(|team| !division.contains(team))
                 .copied()
-                .collect::<HashSet<&str>>()
+                .collect::<Division>()
         })
         .collect::<Vec<Division>>();
 
@@ -156,8 +132,8 @@ pub fn find_closest_divisions(conference: &Conference) {
     }
 
     while !priority_queue.is_empty() {
-        let distance = priority_queue.pop().unwrap();
-        print_divisions(distance);
+        print_divisions(priority_queue.pop().unwrap());
+        priority_queue.pop();
     }
 }
 
@@ -175,7 +151,11 @@ fn sum_division_dist(division: &Division, lookup_table: &HashMap<TeamPair, u32>)
 }
 
 fn print_divisions(distance: DivisionDistance) {
-    let DivisionDistance { dist, first, second } = distance;
+    let DivisionDistance {
+        dist,
+        first,
+        second,
+    } = distance;
     println!("Distance: {}", dist);
     print!("First Division: ");
     for d in first {
@@ -188,6 +168,7 @@ fn print_divisions(distance: DivisionDistance) {
     }
     print!("\n\n");
 }
+
 /*
 pub fn write_all_stadium_distance_pairs_to_file(stadium_names: &[&'static str]) {
     let client = Client::new();
