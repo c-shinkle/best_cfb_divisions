@@ -1,6 +1,5 @@
 use std::collections::HashMap;
 use std::iter::zip;
-use std::mem::size_of;
 
 use itertools::Itertools;
 
@@ -117,8 +116,7 @@ pub fn find_closest_divisions(conference: &Conference) {
 
     let lookup_table = create_lookup_table();
 
-    let mut all_distances =
-        Vec::with_capacity(all_divisions_pairs.len() * size_of::<DivisionDistance>());
+    let mut all_distances = Vec::with_capacity(all_divisions_pairs.len());
 
     for (first, second) in all_divisions_pairs.iter() {
         let first_sum = sum_division_dist(first, &lookup_table);
@@ -133,8 +131,8 @@ pub fn find_closest_divisions(conference: &Conference) {
     }
 
     all_distances.sort();
-    for i in (0..all_distances.len()).step_by(2) {
-        print_divisions(all_distances[i]);
+    for distance in all_distances.into_iter().step_by(2) {
+        print_divisions(distance);
     }
 }
 
