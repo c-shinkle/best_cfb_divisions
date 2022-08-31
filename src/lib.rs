@@ -110,9 +110,7 @@ pub fn find_closest_divisions(conference: &Conference) {
         })
         .collect::<Vec<Division>>();
 
-    let all_divisions_pairs = zip(first_half, second_half)
-        .map(|(first, second)| (first, second))
-        .collect::<Vec<(Division, Division)>>();
+    let all_divisions_pairs = zip(first_half, second_half).collect::<Vec<(Division, Division)>>();
 
     let lookup_table = create_lookup_table();
 
@@ -130,7 +128,7 @@ pub fn find_closest_divisions(conference: &Conference) {
         });
     }
 
-    all_distances.sort();
+    all_distances.sort_unstable();
     for distance in all_distances.into_iter().step_by(2) {
         print_divisions(distance);
     }
