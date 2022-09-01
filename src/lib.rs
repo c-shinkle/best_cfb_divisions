@@ -7,11 +7,11 @@ type Conference = [&'static str];
 type Division = Vec<&'static str>;
 type TeamPair = (&'static str, &'static str);
 
-#[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
-struct DivisionDistance<'a> {
+#[derive(Clone, Eq, Ord, PartialEq, PartialOrd)]
+struct DivisionDistance {
     dist: u32,
-    first: &'a Division,
-    second: &'a Division,
+    first: Division,
+    second: Division,
 }
 
 macro_rules! collection {
@@ -116,9 +116,9 @@ pub fn find_closest_divisions(conference: &Conference) {
 
     let mut all_distances = Vec::with_capacity(all_divisions_pairs.len());
 
-    for (first, second) in all_divisions_pairs.iter() {
-        let first_sum = sum_division_dist(first, &lookup_table);
-        let second_sum = sum_division_dist(second, &lookup_table);
+    for (first, second) in all_divisions_pairs.into_iter() {
+        let first_sum = sum_division_dist(&first, &lookup_table);
+        let second_sum = sum_division_dist(&second, &lookup_table);
         let length = conference.len() as u32;
         let dist = (first_sum + second_sum) / length;
         all_distances.push(DivisionDistance {
