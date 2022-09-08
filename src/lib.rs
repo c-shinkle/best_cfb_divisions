@@ -1,6 +1,8 @@
+pub mod combo;
 use std::collections::HashMap;
 use std::iter::zip;
 
+// use crate::combo::get_all_division_pairs;
 use itertools::Itertools;
 
 type Conference = [&'static str];
@@ -110,16 +112,16 @@ pub fn find_closest_divisions(conference: &Conference) {
         })
         .collect::<Vec<Division>>();
 
-    let all_divisions_pairs = zip(first_half, second_half).collect::<Vec<(Division, Division)>>();
+    let all_division_pairs = zip(first_half, second_half).collect::<Vec<(Division, Division)>>();
 
     let lookup_table = create_lookup_table();
 
-    let mut all_distances = Vec::with_capacity(all_divisions_pairs.len());
+    let mut all_distances = Vec::with_capacity(all_division_pairs.len());
 
-    for (first, second) in all_divisions_pairs.into_iter() {
+    let length = conference.len() as u32;
+    for (first, second) in all_division_pairs.into_iter() {
         let first_sum = sum_division_dist(&first, &lookup_table);
         let second_sum = sum_division_dist(&second, &lookup_table);
-        let length = conference.len() as u32;
         let dist = (first_sum + second_sum) / length;
         all_distances.push(DivisionDistance {
             dist,
