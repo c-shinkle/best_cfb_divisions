@@ -1,7 +1,6 @@
 use crate::{Conference, Division};
-use std::collections::HashMap;
-
 use itertools::Itertools;
+use std::collections::HashMap;
 
 pub fn get_all_division_pairs(conference: &Conference) -> Vec<(Division, Division)> {
     let len = conference.len() as u32;

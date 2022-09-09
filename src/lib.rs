@@ -111,10 +111,9 @@ pub fn find_closest_divisions(conference: &Conference) {
                 second,
             }
         })
-        .sorted_unstable()
-        .collect::<Vec<DivisionDistance>>();
+        .sorted_unstable();
 
-    for distance in all_distances.into_iter() {
+    for distance in all_distances {
         print_divisions(distance);
     }
 }
