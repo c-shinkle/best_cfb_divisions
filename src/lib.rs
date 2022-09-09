@@ -94,12 +94,9 @@ fn create_lookup_table() -> HashMap<TeamPair, u32> {
 
 pub fn find_closest_divisions(conference: &Conference) {
     let all_division_pairs = get_all_division_pairs(conference);
-
     let lookup_table = create_lookup_table();
-
     let length = conference.len() as u32;
-
-    let all_distances = all_division_pairs
+    all_division_pairs
         .into_iter()
         .map(|(first, second)| {
             let first_sum = sum_division_dist(&first, &lookup_table);
@@ -111,11 +108,8 @@ pub fn find_closest_divisions(conference: &Conference) {
                 second,
             }
         })
-        .sorted_unstable();
-
-    for distance in all_distances {
-        print_divisions(distance);
-    }
+        .sorted_unstable()
+        .for_each(print_divisions);
 }
 
 fn sum_division_dist(division: &Division, lookup_table: &HashMap<TeamPair, u32>) -> u32 {
