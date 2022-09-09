@@ -133,14 +133,10 @@ fn print_divisions(distance: DivisionDistance) {
     } = distance;
     println!("Distance: {}", dist);
     print!("First Division: ");
-    for d in first {
-        print!("{}, ", d);
-    }
+    first.into_iter().for_each(|d| print!("{}, ", d));
     println!();
     print!("Second Division: ");
-    for d in second {
-        print!("{}, ", d);
-    }
+    second.into_iter().for_each(|d| print!("{}, ", d));
     print!("\n\n");
 }
 

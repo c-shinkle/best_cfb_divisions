@@ -6,7 +6,6 @@ pub fn get_all_division_pairs(conference: &Conference) -> Vec<(Division, Divisio
     let len = conference.len() as u32;
     let list_of_indices = (0..len)
         .combinations(conference.len() / 2)
-        .map(|indices| indices.to_vec())
         .collect::<Vec<Vec<u32>>>();
 
     let mut map =
