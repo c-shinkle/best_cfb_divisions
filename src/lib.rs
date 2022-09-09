@@ -1,8 +1,9 @@
-pub mod combo;
+pub mod division_pairs;
 use std::collections::HashMap;
-use std::iter::zip;
+// use std::iter::zip;
 
 // use crate::combo::get_all_division_pairs;
+use crate::division_pairs::get_all_division_pairs;
 use itertools::Itertools;
 
 type Conference = [&'static str];
@@ -95,40 +96,25 @@ fn create_lookup_table() -> HashMap<TeamPair, u32> {
 }
 
 pub fn find_closest_divisions(conference: &Conference) {
-    let first_half = conference
-        .iter()
-        .combinations(conference.len() / 2)
-        .map(|combos| combos.iter().map(|s| **s).collect::<Division>())
-        .collect::<Vec<Division>>();
-
-    let second_half = first_half
-        .iter()
-        .map(|division| {
-            conference
-                .iter()
-                .filter(|team| !division.contains(team))
-                .copied()
-                .collect::<Division>()
-        })
-        .collect::<Vec<Division>>();
-
-    let all_division_pairs = zip(first_half, second_half).collect::<Vec<(Division, Division)>>();
+    let all_division_pairs = get_all_division_pairs(conference);
 
     let lookup_table = create_lookup_table();
 
-    let mut all_distances = Vec::with_capacity(all_division_pairs.len());
-
     let length = conference.len() as u32;
-    for (first, second) in all_division_pairs.into_iter() {
-        let first_sum = sum_division_dist(&first, &lookup_table);
-        let second_sum = sum_division_dist(&second, &lookup_table);
-        let dist = (first_sum + second_sum) / length;
-        all_distances.push(DivisionDistance {
-            dist,
-            first,
-            second,
-        });
-    }
+
+    let mut all_distances = all_division_pairs
+        .into_iter()
+        .map(|(first, second)| {
+            let first_sum = sum_division_dist(&first, &lookup_table);
+            let second_sum = sum_division_dist(&second, &lookup_table);
+            let dist = (first_sum + second_sum) / length;
+            DivisionDistance {
+                dist,
+                first,
+                second,
+            }
+        })
+        .collect::<Vec<DivisionDistance>>();
 
     all_distances.sort_unstable();
     for distance in all_distances.into_iter().step_by(2) {

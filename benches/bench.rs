@@ -4,7 +4,7 @@ extern crate test;
 
 #[cfg(test)]
 mod tests {
-    use best_cfb_divisions::combo::get_all_division_pairs;
+    use best_cfb_divisions::division_pairs::get_all_division_pairs;
     use best_cfb_divisions::find_closest_divisions;
     use test::Bencher;
 
