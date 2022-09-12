@@ -23,72 +23,97 @@ macro_rules! collection {
 
 fn create_lookup_table() -> HashMap<TeamPair, u32> {
     collection! {
-        ("Brigham Young University", "Iowa State University") => 1115,
-        ("Brigham Young University", "Kansas State University") => 979,
-        ("Brigham Young University", "Oklahoma State University") => 1122,
-        ("Brigham Young University", "Texas Christian University") => 1180,
-        ("Brigham Young University", "Texas Tech University") => 873,
-        ("Brigham Young University", "University of Baylor") => 1261,
+        ("Brigham Young University", "Iowa State University") => 1123,
+        ("Brigham Young University", "Kansas State University") => 976,
+        ("Brigham Young University", "Oklahoma State University") => 1120,
+        ("Brigham Young University", "Texas Christian University") => 1178,
+        ("Brigham Young University", "Texas Tech University") => 868,
+        ("Brigham Young University", "University of Baylor") => 1259,
         ("Brigham Young University", "University of Central Florida") => 2339,
-        ("Brigham Young University", "University of Cincinnati") => 1663,
-        ("Brigham Young University", "University of Houston") => 1439,
-        ("Brigham Young University", "University of Kansas") => 1049,
+        ("Brigham Young University", "University of Cincinnati") => 1664,
+        ("Brigham Young University", "University of Houston") => 1436,
+        ("Brigham Young University", "University of Kansas") => 1047,
+        ("Brigham Young University", "University of Oklahoma") => 1113,
+        ("Brigham Young University", "University of Texas") => 1246,
         ("Brigham Young University", "University of West Virginia") => 1926,
-        ("Iowa State University", "Kansas State University") => 351,
-        ("Iowa State University", "Oklahoma State University") => 542,
-        ("Iowa State University", "Texas Christian University") => 780,
-        ("Iowa State University", "Texas Tech University") => 926,
-        ("Iowa State University", "University of Baylor") => 862,
-        ("Iowa State University", "University of Central Florida") => 1389,
-        ("Iowa State University", "University of Cincinnati") => 596,
-        ("Iowa State University", "University of Houston") => 972,
-        ("Iowa State University", "University of Kansas") => 267,
-        ("Iowa State University", "University of West Virginia") => 859,
-        ("Kansas State University", "Oklahoma State University") => 256,
-        ("Kansas State University", "Texas Christian University") => 493,
-        ("Kansas State University", "Texas Tech University") => 640,
-        ("Kansas State University", "University of Baylor") => 575,
-        ("Kansas State University", "University of Central Florida") => 1376,
-        ("Kansas State University", "University of Cincinnati") => 710,
-        ("Kansas State University", "University of Houston") => 738,
-        ("Kansas State University", "University of Kansas") => 87,
-        ("Kansas State University", "University of West Virginia") => 986,
-        ("Oklahoma State University", "Texas Christian University") => 268,
-        ("Oklahoma State University", "Texas Tech University") => 414,
-        ("Oklahoma State University", "University of Baylor") => 350,
-        ("Oklahoma State University", "University of Central Florida") => 1312,
+        ("Iowa State University", "Kansas State University") => 356,
+        ("Iowa State University", "Oklahoma State University") => 549,
+        ("Iowa State University", "Texas Christian University") => 787,
+        ("Iowa State University", "Texas Tech University") => 933,
+        ("Iowa State University", "University of Baylor") => 869,
+        ("Iowa State University", "University of Central Florida") => 1350,
+        ("Iowa State University", "University of Cincinnati") => 566,
+        ("Iowa State University", "University of Houston") => 978,
+        ("Iowa State University", "University of Kansas") => 276,
+        ("Iowa State University", "University of Oklahoma") => 604,
+        ("Iowa State University", "University of Texas") => 969,
+        ("Iowa State University", "University of West Virginia") => 828,
+        ("Kansas State University", "Oklahoma State University") => 254,
+        ("Kansas State University", "Texas Christian University") => 492,
+        ("Kansas State University", "Texas Tech University") => 638,
+        ("Kansas State University", "University of Baylor") => 574,
+        ("Kansas State University", "University of Central Florida") => 1372,
+        ("Kansas State University", "University of Cincinnati") => 708,
+        ("Kansas State University", "University of Houston") => 735,
+        ("Kansas State University", "University of Kansas") => 85,
+        ("Kansas State University", "University of Oklahoma") => 309,
+        ("Kansas State University", "University of Texas") => 674,
+        ("Kansas State University", "University of West Virginia") => 983,
+        ("Oklahoma State University", "Texas Christian University") => 267,
+        ("Oklahoma State University", "Texas Tech University") => 413,
+        ("Oklahoma State University", "University of Baylor") => 348,
+        ("Oklahoma State University", "University of Central Florida") => 1311,
         ("Oklahoma State University", "University of Cincinnati") => 809,
-        ("Oklahoma State University", "University of Houston") => 512,
-        ("Oklahoma State University", "University of Kansas") => 279,
-        ("Oklahoma State University", "University of West Virginia") => 1085,
-        ("Texas Christian University", "Texas Tech University") => 321,
+        ("Oklahoma State University", "University of Houston") => 510,
+        ("Oklahoma State University", "University of Kansas") => 281,
+        ("Oklahoma State University", "University of Oklahoma") => 84,
+        ("Oklahoma State University", "University of Texas") => 449,
+        ("Oklahoma State University", "University of West Virginia") => 1084,
+        ("Texas Christian University", "Texas Tech University") => 315,
         ("Texas Christian University", "University of Baylor") => 87,
-        ("Texas Christian University", "University of Central Florida") => 1139,
+        ("Texas Christian University", "University of Central Florida") => 1138,
         ("Texas Christian University", "University of Cincinnati") => 970,
-        ("Texas Christian University", "University of Houston") => 268,
+        ("Texas Christian University", "University of Houston") => 267,
         ("Texas Christian University", "University of Kansas") => 516,
-        ("Texas Christian University", "University of West Virginia") => 1242,
-        ("Texas Tech University", "University of Baylor") => 355,
-        ("Texas Tech University", "University of Central Florida") => 1453,
-        ("Texas Tech University", "University of Cincinnati") => 1191,
-        ("Texas Tech University", "University of Houston") => 524,
-        ("Texas Tech University", "University of Kansas") => 662,
-        ("Texas Tech University", "University of West Virginia") => 1467,
-        ("University of Baylor", "University of Central Florida") => 1158,
+        ("Texas Christian University", "University of Oklahoma") => 187,
+        ("Texas Christian University", "University of Texas") => 187,
+        ("Texas Christian University", "University of West Virginia") => 1239,
+        ("Texas Tech University", "University of Baylor") => 353,
+        ("Texas Tech University", "University of Central Florida") => 1449,
+        ("Texas Tech University", "University of Cincinnati") => 1193,
+        ("Texas Tech University", "University of Houston") => 521,
+        ("Texas Tech University", "University of Kansas") => 664,
+        ("Texas Tech University", "University of Oklahoma") => 344,
+        ("Texas Tech University", "University of Texas") => 373,
+        ("Texas Tech University", "University of West Virginia") => 1468,
+        ("University of Baylor", "University of Central Florida") => 1132,
         ("University of Baylor", "University of Cincinnati") => 1028,
-        ("University of Baylor", "University of Houston") => 186,
+        ("University of Baylor", "University of Houston") => 185,
         ("University of Baylor", "University of Kansas") => 598,
-        ("University of Baylor", "University of West Virginia") => 1300,
-        ("University of Central Florida", "University of Cincinnati") => 917,
-        ("University of Central Florida", "University of Houston") => 981,
+        ("University of Baylor", "University of Oklahoma") => 269,
+        ("University of Baylor", "University of Texas") => 101,
+        ("University of Baylor", "University of West Virginia") => 1297,
+        ("University of Central Florida", "University of Cincinnati") => 915,
+        ("University of Central Florida", "University of Houston") => 978,
         ("University of Central Florida", "University of Kansas") => 1294,
-        ("University of Central Florida", "University of West Virginia") => 901,
-        ("University of Cincinnati", "University of Houston") => 1054,
-        ("University of Cincinnati", "University of Kansas") => 627,
-        ("University of Cincinnati", "University of West Virginia") => 307,
+        ("University of Central Florida", "University of Oklahoma") => 1289,
+        ("University of Central Florida", "University of Texas") => 1136,
+        ("University of Central Florida", "University of West Virginia") => 900,
+        ("University of Cincinnati", "University of Houston") => 1053,
+        ("University of Cincinnati", "University of Kansas") => 629,
+        ("University of Cincinnati", "University of Oklahoma") => 864,
+        ("University of Cincinnati", "University of Texas") => 1130,
+        ("University of Cincinnati", "University of West Virginia") => 306,
         ("University of Houston", "University of Kansas") => 760,
-        ("University of Houston", "University of West Virginia") => 1348,
-        ("University of Kansas", "University of West Virginia") => 902,
+        ("University of Houston", "University of Oklahoma") => 431,
+        ("University of Houston", "University of Texas") => 164,
+        ("University of Houston", "University of West Virginia") => 1344,
+        ("University of Kansas", "University of Oklahoma") => 333,
+        ("University of Kansas", "University of Texas") => 698,
+        ("University of Kansas", "University of West Virginia") => 903,
+        ("University of Oklahoma", "University of Texas") => 369,
+        ("University of Oklahoma", "University of West Virginia") => 1139,
+        ("University of Texas", "University of West Virginia") => 1397,
     }
 }
 
@@ -139,63 +164,3 @@ fn print_divisions(distance: DivisionDistance) {
     second.into_iter().for_each(|d| print!("{}, ", d));
     print!("\n\n");
 }
-
-/*
-pub fn write_all_stadium_distance_pairs_to_file(stadium_names: &[&'static str]) {
-    let client = Client::new();
-    let mut file = File::create("output.txt").expect("creating file failed!");
-
-    let combinations = stadium_names
-        .iter()
-        .tuple_combinations::<(&&str, &&str)>()
-        .map(|(a, b)| (*a, *b))
-        .collect::<Vec<(&str, &str)>>();
-    for (origin, destination) in combinations {
-        let params = [
-            ("outputFormat", "json"),
-            ("origin", origin),
-            ("destination", destination),
-            ("key", "<key>"),
-        ];
-        let request = client
-            .get("https://maps.googleapis.com/maps/api/directions/json")
-            .query(&params)
-            .send()
-            .expect("The web client failed!");
-
-        if !request.status().is_success() {
-            println!("Received status code {}", request.status().as_str());
-            return;
-        }
-
-        let json = request.text().expect("The json failed!");
-        // println!("Response Body: {}", json);
-
-        let value = serde_json::from_str::<Value>(&json).expect("serde_json failed!");
-        let routes = value["routes"].as_array().expect("No 'routes' found!");
-        let route = routes[0].as_object().expect("No 'route' found!");
-        let legs = route
-            .get("legs")
-            .unwrap()
-            .as_array()
-            .expect("No 'legs' found!");
-        let leg = legs[0].as_object().expect("No 'leg' found!");
-        let distance = leg.get("distance").expect("No 'distance' found!");
-        let text = distance.get("text").expect("No 'text' found!");
-        let miles_string = text.to_string();
-        let miles = miles_string
-            .trim_matches('"')
-            .split(' ')
-            .next()
-            .unwrap_or_else(|| panic!("Couldn't parse: {}", miles_string));
-        println!(
-            "The distance from {} to {} is {} miles!",
-            origin, destination, miles
-        );
-
-        let temp = format!("(\"{}\", \"{}\") => {},\n", origin, destination, miles);
-        file.write_all(temp.as_bytes())
-            .expect("file writing failed!");
-    }
-}
- */

@@ -8,7 +8,7 @@ mod tests {
     use best_cfb_divisions::find_closest_divisions;
     use test::Bencher;
 
-    const CONFERENCE: [&str; 12] = [
+    const CONFERENCE: [&str; 14] = [
         "Brigham Young University",
         "Iowa State University",
         "Kansas State University",
@@ -20,6 +20,8 @@ mod tests {
         "University of Cincinnati",
         "University of Houston",
         "University of Kansas",
+        "University of Oklahoma",
+        "University of Texas",
         "University of West Virginia",
     ];
 
