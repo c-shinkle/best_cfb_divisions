@@ -1,17 +1,32 @@
 pub mod division_pairs;
+
+use std::cmp::Ordering;
 use crate::division_pairs::get_all_division_pairs;
 use itertools::Itertools;
 use std::collections::HashMap;
+use rayon::prelude::*;
 
 type Conference = [&'static str];
 type Division = Vec<&'static str>;
 type TeamPair = (&'static str, &'static str);
 
-#[derive(Clone, Eq, Ord, PartialEq, PartialOrd)]
+#[derive(Clone, Eq, PartialEq)]
 struct DivisionDistance {
     dist: u32,
     first: Division,
     second: Division,
+}
+
+impl PartialOrd<Self> for DivisionDistance {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        self.dist.partial_cmp(&other.dist)
+    }
+}
+
+impl<'a> Ord for DivisionDistance {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.dist.cmp(&other.dist)
+    }
 }
 
 macro_rules! collection {
@@ -121,8 +136,9 @@ pub fn find_closest_divisions(conference: &Conference) {
     let all_division_pairs = get_all_division_pairs(conference);
     let lookup_table = create_lookup_table();
     let length = conference.len() as u32;
+    let mut distances = Vec::with_capacity(all_division_pairs.len());
     all_division_pairs
-        .into_iter()
+        .into_par_iter()
         .map(|(first, second)| {
             let first_sum = sum_division_dist(&first, &lookup_table);
             let second_sum = sum_division_dist(&second, &lookup_table);
@@ -133,8 +149,10 @@ pub fn find_closest_divisions(conference: &Conference) {
                 second,
             }
         })
-        .sorted_unstable()
-        .for_each(print_divisions);
+        .collect_into_vec(&mut distances);
+    distances.par_sort_unstable();
+
+    distances.into_iter().for_each(print_divisions);
 }
 
 fn sum_division_dist(division: &Division, lookup_table: &HashMap<TeamPair, u32>) -> u32 {
@@ -151,16 +169,11 @@ fn sum_division_dist(division: &Division, lookup_table: &HashMap<TeamPair, u32>)
 }
 
 fn print_divisions(distance: DivisionDistance) {
-    let DivisionDistance {
-        dist,
-        first,
-        second,
-    } = distance;
-    println!("Distance: {}", dist);
+    println!("Distance: {}", distance.dist);
     print!("First Division: ");
-    first.into_iter().for_each(|d| print!("{}, ", d));
+    distance.first.into_iter().for_each(|d| print!("{}, ", d));
     println!();
     print!("Second Division: ");
-    second.into_iter().for_each(|d| print!("{}, ", d));
+    distance.second.into_iter().for_each(|d| print!("{}, ", d));
     print!("\n\n");
 }
