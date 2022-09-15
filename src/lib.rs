@@ -169,9 +169,13 @@ fn sum_division_dist(division: &Division, lookup_table: &HashMap<TeamPair, u32>)
 fn print_divisions(distance: DivisionDistance) {
     println!("Distance: {}", distance.dist);
     print!("First Division: ");
-    distance.first.into_iter().for_each(|d| print!("{}, ", d));
-    println!();
+    for i in 0..distance.first.len()-1 {
+        print!("{}, ", distance.first[i]);
+    }
+    println!("{}", distance.first[distance.first.len()-1]);
     print!("Second Division: ");
-    distance.second.into_iter().for_each(|d| print!("{}, ", d));
-    print!("\n\n");
+    for i in 0..distance.second.len()-1 {
+        print!("{}, ", distance.second[i]);
+    }
+    println!("{}", distance.second[distance.second.len()-1]);
 }
