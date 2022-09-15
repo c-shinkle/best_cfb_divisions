@@ -1,14 +1,15 @@
 pub mod division_pairs;
 
-use std::cmp::Ordering;
 use crate::division_pairs::get_all_division_pairs;
 use itertools::Itertools;
-use std::collections::HashMap;
 use rayon::prelude::*;
+use std::cmp::Ordering;
+use std::collections::HashMap;
 
 type Conference = [&'static str];
 type Division = Vec<&'static str>;
 type TeamPair = (&'static str, &'static str);
+type DivisionPair = (Division, Division);
 
 #[derive(Clone, Eq, PartialEq)]
 struct DivisionDistance {
@@ -23,7 +24,7 @@ impl PartialOrd<Self> for DivisionDistance {
     }
 }
 
-impl<'a> Ord for DivisionDistance {
+impl Ord for DivisionDistance {
     fn cmp(&self, other: &Self) -> Ordering {
         self.dist.cmp(&other.dist)
     }
@@ -135,24 +136,21 @@ fn create_lookup_table() -> HashMap<TeamPair, u32> {
 pub fn find_closest_divisions(conference: &Conference) {
     let all_division_pairs = get_all_division_pairs(conference);
     let lookup_table = create_lookup_table();
-    let length = conference.len() as u32;
-    let mut distances = Vec::with_capacity(all_division_pairs.len());
-    all_division_pairs
+    let min_division_distance = all_division_pairs
         .into_par_iter()
         .map(|(first, second)| {
             let first_sum = sum_division_dist(&first, &lookup_table);
             let second_sum = sum_division_dist(&second, &lookup_table);
-            let dist = (first_sum + second_sum) / length;
+            let dist = (first_sum + second_sum) / conference.len() as u32;
             DivisionDistance {
                 dist,
                 first,
                 second,
             }
         })
-        .collect_into_vec(&mut distances);
-    distances.par_sort_unstable();
-
-    distances.into_iter().for_each(print_divisions);
+        .min()
+        .unwrap();
+    print_divisions(min_division_distance);
 }
 
 fn sum_division_dist(division: &Division, lookup_table: &HashMap<TeamPair, u32>) -> u32 {
