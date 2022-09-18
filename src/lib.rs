@@ -134,6 +134,7 @@ fn create_lookup_table() -> HashMap<TeamPair, u32> {
 }
 
 pub fn find_closest_divisions(conference: &Conference) {
+    assert!(conference.len() >= 4);
     let all_division_pairs = get_all_division_pairs(conference);
     let lookup_table = create_lookup_table();
     let min_division_distance = all_division_pairs
@@ -167,6 +168,7 @@ fn sum_division_dist(division: &Division, lookup_table: &HashMap<TeamPair, u32>)
 }
 
 fn print_divisions(distance: DivisionDistance) {
+    assert!(distance.first.len() > 0 && distance.second.len() > 0);
     println!("Distance: {}", distance.dist);
     print!("First Division: ");
     for i in 0..distance.first.len() - 1 {
