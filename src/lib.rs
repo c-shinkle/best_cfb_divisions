@@ -168,7 +168,7 @@ fn sum_division_dist(division: &Division, lookup_table: &HashMap<TeamPair, u32>)
 }
 
 fn print_divisions(distance: DivisionDistance) {
-    assert!(distance.first.len() > 0 && distance.second.len() > 0);
+    assert!(!distance.first.is_empty() && !distance.second.is_empty());
     println!("Distance: {}", distance.dist);
     println!("First Division: {}", distance.first.iter().join(", "));
     println!("Second Division: {}", distance.second.iter().join(", "));
