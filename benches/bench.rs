@@ -26,16 +26,16 @@ mod tests {
     ];
 
     #[bench]
-    fn create_non_duplicate_combinations_test(b: &mut Bencher) {
-        b.iter(|| {
-            let _x = get_all_division_pairs(&CONFERENCE);
-        })
-    }
-
-    #[bench]
-    fn find_closest_divisions_test(b: &mut Bencher) {
+    fn find_closest_divisions_bench(b: &mut Bencher) {
         b.iter(|| {
             find_closest_divisions(&CONFERENCE);
         });
+    }
+
+    #[bench]
+    fn get_all_division_pairs_bench(b: &mut Bencher) {
+        b.iter(|| {
+            let _x = get_all_division_pairs(&CONFERENCE);
+        })
     }
 }
