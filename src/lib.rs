@@ -134,7 +134,8 @@ fn create_lookup_table() -> HashMap<TeamPair, u32> {
 }
 
 pub fn find_closest_divisions(conference: &Conference) {
-    assert!(conference.len() >= 4);
+    let len = conference.len() as u32;
+    assert!(len >= 4);
     let all_division_pairs = get_all_division_pairs(conference);
     let lookup_table = create_lookup_table();
     let min_division_distance = all_division_pairs
@@ -142,7 +143,7 @@ pub fn find_closest_divisions(conference: &Conference) {
         .map(|(first, second)| {
             let first_sum = sum_division_dist(&first, &lookup_table);
             let second_sum = sum_division_dist(&second, &lookup_table);
-            let dist = (first_sum + second_sum) / conference.len() as u32;
+            let dist = (first_sum + second_sum) / len;
             DivisionDistance {
                 dist,
                 first,
@@ -150,7 +151,7 @@ pub fn find_closest_divisions(conference: &Conference) {
             }
         })
         .min()
-        .unwrap();
+        .expect("All division pairs are not empty!");
     print_divisions(min_division_distance);
 }
 
@@ -170,6 +171,6 @@ fn sum_division_dist(division: &Division, lookup_table: &HashMap<TeamPair, u32>)
 fn print_divisions(distance: DivisionDistance) {
     assert!(!distance.first.is_empty() && !distance.second.is_empty());
     println!("Distance: {}", distance.dist);
-    println!("First Division: {}", distance.first.iter().join(", "));
-    println!("Second Division: {}", distance.second.iter().join(", "));
+    println!("First Division: {}", distance.first.join(", "));
+    println!("Second Division: {}", distance.second.join(", "));
 }
