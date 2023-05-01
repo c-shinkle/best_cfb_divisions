@@ -1,30 +1,25 @@
-use crate::{Conference, Division, DivisionPair};
+use crate::{Conference, DivisionPair};
 use itertools::Itertools;
 use std::collections::HashMap;
 
 pub fn get_all_division_pairs(conference: &Conference) -> Vec<DivisionPair> {
-    let len = conference.len() as u32;
-    let list_of_indices = (0..len)
-        .combinations(conference.len() / 2)
-        .collect::<Vec<Vec<u32>>>();
+    let len = conference.len();
+    let index_combinations = (0..len).combinations(len / 2).collect::<Vec<Vec<usize>>>();
 
-    let mut map = HashMap::<Vec<u32>, DivisionPair>::with_capacity(list_of_indices.len() / 2);
-    for indices in list_of_indices {
-        if !map.contains_key(&indices) {
+    let mut map = HashMap::with_capacity(index_combinations.len() / 2);
+    let index_into = |i: usize| conference[i];
+    for combo in index_combinations {
+        if !map.contains_key(&combo) {
             let complement = (0..len)
                 .into_iter()
-                .filter(|i| !indices.contains(i))
-                .collect::<Vec<u32>>();
+                .filter(|i| !combo.contains(i))
+                .collect::<Vec<usize>>();
             if !map.contains_key(&complement) {
-                let first = indices
-                    .iter()
-                    .map(|i| conference[*i as usize])
-                    .collect::<Division>();
-                let second = complement
-                    .into_iter()
-                    .map(|i| conference[i as usize])
-                    .collect::<Division>();
-                map.insert(indices, (first, second));
+                let division_pair = (
+                    combo.iter().copied().map(index_into).collect(),
+                    complement.into_iter().map(index_into).collect(),
+                );
+                map.insert(combo, division_pair);
             }
         }
     }
