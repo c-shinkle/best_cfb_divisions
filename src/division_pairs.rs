@@ -10,15 +10,15 @@ pub fn get_all_division_pairs(conference: &Conference) -> Vec<DivisionPair> {
     let index_into = |i: usize| conference[i];
     for combo in index_combinations {
         if !map.contains_key(&combo) {
-            let complement = (0..len)
-                .filter(|i| !combo.contains(i))
-                .collect::<Vec<usize>>();
+            let complement: Vec<usize> = (0..len).filter(|i| !combo.contains(i)).collect();
             if !map.contains_key(&complement) {
-                let division_pair = (
-                    combo.iter().copied().map(index_into).collect(),
-                    complement.into_iter().map(index_into).collect(),
+                map.insert(
+                    combo.clone(),
+                    (
+                        combo.into_iter().map(index_into).collect(),
+                        complement.into_iter().map(index_into).collect(),
+                    ),
                 );
-                map.insert(combo, division_pair);
             }
         }
     }
