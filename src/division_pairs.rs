@@ -11,7 +11,6 @@ pub fn get_all_division_pairs(conference: &Conference) -> Vec<DivisionPair> {
     for combo in index_combinations {
         if !map.contains_key(&combo) {
             let complement = (0..len)
-                .into_iter()
                 .filter(|i| !combo.contains(i))
                 .collect::<Vec<usize>>();
             if !map.contains_key(&complement) {
