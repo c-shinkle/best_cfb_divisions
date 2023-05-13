@@ -135,7 +135,10 @@ fn create_lookup_table() -> HashMap<TeamPair, u32> {
 
 pub fn find_closest_divisions(conference: &Conference) {
     let len = conference.len() as u32;
-    assert!(len >= 4);
+    assert!(
+        conference.len() >= 4,
+        "The algorithm will fail for conference length < 4!"
+    );
     let all_division_pairs = get_all_division_pairs(conference);
     let lookup_table = create_lookup_table();
     let min_division_distance = all_division_pairs
