@@ -1,11 +1,11 @@
 pub mod distance_lookup_table;
 pub mod division_distance;
-pub mod division_pairs;
+pub mod division_pair;
 pub mod types;
 
 use crate::distance_lookup_table::create_lookup_table;
 use crate::division_distance::new;
-use crate::division_pairs::get_all_division_pairs;
+use crate::division_pair::get_all_division_pairs;
 use crate::types::*;
 use itertools::Itertools;
 use rayon::prelude::*;

@@ -1,4 +1,5 @@
-pub type Conference = [&'static str];
-pub type Division = Vec<&'static str>;
-pub type TeamPair = (&'static str, &'static str);
+pub type Team = &'static str;
+pub type TeamPair = (Team, Team);
+pub type Division = Vec<Team>;
 pub type DivisionPair = (Division, Division);
+pub type Conference = [Team];
