@@ -3,13 +3,12 @@ name = "best_cfb_divisions"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 itertools = "0.10.5"
-reqwest = { version = "0.11", features = ["blocking", "json"] }
-serde_json = "1.0.85"
+rand = "0.8.5"
 rayon = "1.5.3"
+# reqwest = { version = "0.11", features = ["blocking", "json"] }
+# serde_json = "1.0.85"
 
 [profile.release]
 lto = true

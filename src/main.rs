@@ -1,6 +1,4 @@
 mod script;
-#[allow(unused_imports)]
-use crate::script::write_all_stadium_distance_pairs_to_file;
 use best_cfb_divisions::find_closest_divisions;
 
 fn main() {
@@ -20,6 +18,5 @@ fn main() {
         "University of Texas",
         "University of West Virginia",
     ];
-    // write_all_stadium_distance_pairs_to_file(&conference);
     find_closest_divisions(&conference);
 }
