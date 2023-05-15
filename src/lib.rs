@@ -1,33 +1,15 @@
 pub mod distance_lookup_table;
+pub mod division_distance;
 pub mod division_pairs;
 pub mod types;
 
 use crate::distance_lookup_table::create_lookup_table;
+use crate::division_distance::new;
 use crate::division_pairs::get_all_division_pairs;
 use crate::types::*;
 use itertools::Itertools;
 use rayon::prelude::*;
-use std::cmp::Ordering;
 use std::collections::HashMap;
-
-#[derive(Clone, Eq, PartialEq)]
-struct DivisionDistance {
-    dist: u32,
-    first: Division,
-    second: Division,
-}
-
-impl PartialOrd<Self> for DivisionDistance {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        self.dist.partial_cmp(&other.dist)
-    }
-}
-
-impl Ord for DivisionDistance {
-    fn cmp(&self, other: &Self) -> Ordering {
-        self.dist.cmp(&other.dist)
-    }
-}
 
 pub fn find_closest_divisions(conference: &Conference) {
     let len = conference.len() as u32;
@@ -43,18 +25,11 @@ pub fn find_closest_divisions(conference: &Conference) {
             let first_sum = sum_division_dist(&first, &lookup_table);
             let second_sum = sum_division_dist(&second, &lookup_table);
             let dist = (first_sum + second_sum) / len;
-            DivisionDistance {
-                dist,
-                first,
-                second,
-            }
+            new(dist, first, second)
         })
         .min()
         .expect("All division pairs are not empty!");
-    assert!(!distance.first.is_empty() && !distance.second.is_empty());
-    println!("Distance: {}", distance.dist);
-    println!("First Division: {}", distance.first.join(", "));
-    println!("Second Division: {}", distance.second.join(", "));
+    println!("{distance}");
 }
 
 fn sum_division_dist(division: &Division, lookup_table: &HashMap<TeamPair, u32>) -> u32 {
