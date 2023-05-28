@@ -1,9 +1,8 @@
 mod script;
-use best_cfb_divisions::find_closest_divisions;
 
 fn main() {
     println!("main --------------------");
-    let conference = [
+    let _conference = [
         "Brigham Young University",
         "Iowa State University",
         "Kansas State University",
