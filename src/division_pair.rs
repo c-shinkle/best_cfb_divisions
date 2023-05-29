@@ -5,57 +5,50 @@ use std::collections::HashSet;
 use std::hash::{Hash, Hasher};
 
 #[derive(Debug)]
-struct CombinationIndexes {
-    indexes: Vec<usize>,
+struct Indexes {
+    indexes: Vec<u32>,
+    compliment: Vec<u32>,
 }
 
-impl PartialEq for CombinationIndexes {
-    fn eq(&self, other: &CombinationIndexes) -> bool {
-        self.indexes == other.indexes
-            || get_compliment(self.indexes.len() * 2, &self.indexes) == other.indexes
+impl PartialEq for Indexes {
+    fn eq(&self, other: &Indexes) -> bool {
+        self.indexes == other.indexes || self.compliment == other.indexes
     }
 }
 
-impl Eq for CombinationIndexes {}
+impl Eq for Indexes {}
 
-impl Hash for CombinationIndexes {
+impl Hash for Indexes {
     fn hash<H: Hasher>(&self, state: &mut H) {
-        let comp = get_compliment(self.indexes.len() * 2, &self.indexes);
         if self.indexes[0] == 0 {
             self.indexes.hash(state);
-            comp.hash(state);
+            self.compliment.hash(state);
         } else {
-            comp.hash(state);
+            self.compliment.hash(state);
             self.indexes.hash(state);
         }
     }
 }
 
-fn get_compliment(len: usize, index_combo: &[usize]) -> Vec<usize> {
-    (0..len).filter(|i| !index_combo.contains(i)).collect()
-}
-
 pub fn get_all_division_pairs(conference: &Conference) -> Vec<DivisionPair> {
     let len = conference.len();
-    let indexes_combinations: Vec<Vec<usize>> = (0..len).combinations(len / 2).collect();
-
-    let mut set: HashSet<CombinationIndexes> =
-        HashSet::with_capacity(indexes_combinations.len() / 2);
+    let indexes_combinations: Vec<Vec<u32>> = (0..len as u32).combinations(len / 2).collect();
+    let mut set: HashSet<Indexes> = HashSet::with_capacity(indexes_combinations.len() / 2);
 
     for indexes in indexes_combinations {
-        set.insert(CombinationIndexes { indexes });
+        let compliment = (0..len as u32).filter(|i| !indexes.contains(i)).collect();
+        set.insert(Indexes {
+            indexes,
+            compliment,
+        });
     }
 
-    let index_into = |i: usize| conference[i];
+    let index_into = |i: u32| conference[i as usize];
     set.into_iter()
         .map(|combo| {
-            let indexes = combo.indexes;
             (
-                (0..len)
-                    .filter(|i| !indexes.contains(i))
-                    .map(index_into)
-                    .collect(),
-                indexes.into_iter().map(index_into).collect(),
+                combo.indexes.into_iter().map(index_into).collect(),
+                combo.compliment.into_iter().map(index_into).collect(),
             )
         })
         .collect()
@@ -75,9 +68,9 @@ mod test {
         let actual: Vec<DivisionPair> = get_all_division_pairs(&conference);
 
         let expected: HashSet<DivisionPair> = HashSet::from([
-            (vec!["C", "D"], vec!["A", "B"]),
-            (vec!["B", "D"], vec!["A", "C"]),
-            (vec!["B", "C"], vec!["A", "D"]),
+            (vec!["A", "B"], vec!["C", "D"]),
+            (vec!["A", "C"], vec!["B", "D"]),
+            (vec!["A", "D"], vec!["B", "C"]),
         ]);
 
         assert_eq!(actual.len(), expected.len());
