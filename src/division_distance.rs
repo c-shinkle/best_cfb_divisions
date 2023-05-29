@@ -10,11 +10,13 @@ pub struct DivisionDistance {
     second: Division,
 }
 
-pub fn new(dist: u32, first: Division, second: Division) -> DivisionDistance {
-    DivisionDistance {
-        dist,
-        first,
-        second,
+impl DivisionDistance {
+    pub fn new(dist: u32, first: Division, second: Division) -> DivisionDistance {
+        DivisionDistance {
+            dist,
+            first,
+            second,
+        }
     }
 }
 

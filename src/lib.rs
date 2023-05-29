@@ -4,7 +4,7 @@ pub mod division_pair;
 pub mod types;
 
 use crate::distance_lookup_table::create_lookup_table;
-use crate::division_distance::new;
+use crate::division_distance::DivisionDistance;
 use crate::division_pair::get_all_division_pairs;
 use crate::types::*;
 use itertools::Itertools;
@@ -25,7 +25,9 @@ pub fn find_closest_divisions(conference: &Conference) {
             let first_sum = sum_division_dist(&first, &lookup_table);
             let second_sum = sum_division_dist(&second, &lookup_table);
             let dist = (first_sum + second_sum) / len;
-            new(dist, first, second)
+            //Is it cheaper to cache Divisions?
+            //Or to concat Team names every iteration?
+            DivisionDistance::new(dist, first, second)
         })
         .min()
         .expect("All division pairs are not empty!");
