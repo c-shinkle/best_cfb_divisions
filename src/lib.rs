@@ -24,10 +24,7 @@ pub fn find_closest_divisions(conference: &Conference) {
         .map(|(first, second)| {
             let first_sum = sum_division_dist(&first, &lookup_table);
             let second_sum = sum_division_dist(&second, &lookup_table);
-            let dist = (first_sum + second_sum) / len;
-            //Is it cheaper to cache Divisions?
-            //Or to concat Team names every iteration?
-            DivisionDistance::new(dist, first, second)
+            DivisionDistance::new((first_sum + second_sum) / len, first, second)
         })
         .min()
         .expect("All division pairs are not empty!");
