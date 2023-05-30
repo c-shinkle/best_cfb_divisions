@@ -4,7 +4,7 @@ extern crate test;
 
 #[cfg(test)]
 mod tests {
-    use best_cfb_divisions::division_pair::get_all_division_pairs;
+    use best_cfb_divisions::division_pair::{division_pair_map, division_pair_set};
     use best_cfb_divisions::find_closest_divisions;
     use test::Bencher;
 
@@ -33,9 +33,16 @@ mod tests {
     }
 
     #[bench]
-    fn get_all_division_pairs_bench(b: &mut Bencher) {
+    fn map_division_pairs_bench(b: &mut Bencher) {
         b.iter(|| {
-            let _ = get_all_division_pairs(&CONFERENCE);
+            let _ = division_pair_map::get_all_division_pairs(&CONFERENCE);
+        })
+    }
+
+    #[bench]
+    fn set_division_pairs_bench(b: &mut Bencher) {
+        b.iter(|| {
+            let _ = division_pair_set::get_all_division_pairs(&CONFERENCE);
         })
     }
 }

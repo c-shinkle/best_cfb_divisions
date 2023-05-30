@@ -5,7 +5,7 @@ pub mod types;
 
 use crate::distance_lookup_table::create_lookup_table;
 use crate::division_distance::DivisionDistance;
-use crate::division_pair::get_all_division_pairs;
+use crate::division_pair::division_pair_set;
 use crate::types::*;
 use itertools::Itertools;
 use rayon::prelude::*;
@@ -17,7 +17,7 @@ pub fn find_closest_divisions(conference: &Conference) {
         conference.len() >= 4,
         "The algorithm will fail for conference length < 4!"
     );
-    let all_division_pairs = get_all_division_pairs(conference);
+    let all_division_pairs = division_pair_set::get_all_division_pairs(conference);
     let lookup_table = create_lookup_table();
     let distance = all_division_pairs
         .into_par_iter()
@@ -38,9 +38,9 @@ fn sum_division_dist(division: &Division, lookup_table: &HashMap<TeamPair, u32>)
     division
         .iter()
         .tuple_combinations::<(&&str, &&str)>()
-        .map(|(a, b)| match lookup_table.get(&(a, b)) {
-            Some(dist) => *dist,
-            None => *lookup_table.get(&(b, a)).unwrap(),
+        .map(|(a, b)| {
+            let first = lookup_table.get(&(a, b));
+            first.or_else(|| lookup_table.get(&(b, a))).unwrap()
         })
         .sum()
 }
