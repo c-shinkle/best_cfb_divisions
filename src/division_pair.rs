@@ -1,5 +1,7 @@
 pub mod division_pair_set {
+    extern crate fxhash;
     use crate::types::*;
+    use fxhash::{FxBuildHasher, FxHashSet};
     use itertools::Itertools;
     use std::collections::HashSet;
     use std::hash::{Hash, Hasher};
@@ -33,7 +35,10 @@ pub mod division_pair_set {
     pub fn get_all_division_pairs(conference: &Conference) -> Vec<DivisionPair> {
         let len = conference.len();
         let indexes_combinations: Vec<Vec<u32>> = (0..len as u32).combinations(len / 2).collect();
-        let mut set: HashSet<Indexes> = HashSet::with_capacity(indexes_combinations.len() / 2);
+        let mut set: FxHashSet<Indexes> = HashSet::with_capacity_and_hasher(
+            indexes_combinations.len() / 2,
+            FxBuildHasher::default(),
+        );
 
         for indexes in indexes_combinations {
             let compliment = (0..len as u32).filter(|i| !indexes.contains(i)).collect();
@@ -80,16 +85,20 @@ pub mod division_pair_set {
 }
 
 pub mod division_pair_map {
+    extern crate fxhash;
     use crate::types::*;
+    use fxhash::{FxBuildHasher, FxHashMap};
     use itertools::Itertools;
-    use std::collections::HashMap;
 
     pub fn get_all_division_pairs(conference: &Conference) -> Vec<DivisionPair> {
         let len = conference.len();
         let index_combinations: Vec<Vec<usize>> = (0..len).combinations(len / 2).collect();
-
-        let mut map = HashMap::with_capacity(index_combinations.len() / 2);
+        let mut map = FxHashMap::with_capacity_and_hasher(
+            index_combinations.len() / 2,
+            FxBuildHasher::default(),
+        );
         let index_into = |i: usize| conference[i];
+
         for combo in index_combinations {
             if !map.contains_key(&combo) {
                 let comp: Vec<usize> = (0..len).filter(|i| !combo.contains(i)).collect();
