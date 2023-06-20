@@ -32,9 +32,13 @@ pub mod division_pair_set {
 
     pub fn get_all_division_pairs(conference: &Conference) -> Vec<DivisionPair> {
         let len = conference.len();
-        let indexes_combinations: Vec<Vec<u32>> = (0..len as u32).combinations(len / 2).collect();
-        let mut set: AHashSet<Indexes> = AHashSet::with_capacity(indexes_combinations.len() / 2);
+        let number_of_combinations = count_combinations(len, len / 2);
+        let mut indexes_combinations: Vec<Vec<u32>> = Vec::with_capacity(number_of_combinations);
+        for combo in (0..len as u32).combinations(len / 2) {
+            indexes_combinations.push(combo);
+        }
 
+        let mut set: AHashSet<Indexes> = AHashSet::with_capacity(number_of_combinations / 2);
         for indexes in indexes_combinations {
             let compliment = (0..len as u32).filter(|i| !indexes.contains(i)).collect();
             set.insert(Indexes {
@@ -52,6 +56,10 @@ pub mod division_pair_set {
                 )
             })
             .collect()
+    }
+
+    fn count_combinations(n: usize, r: usize) -> usize {
+        (1..=r).fold(1, |acc, val| acc * (n - val + 1) / val)
     }
 
     #[cfg(test)]
@@ -86,7 +94,11 @@ pub mod division_pair_map {
 
     pub fn get_all_division_pairs(conference: &Conference) -> Vec<DivisionPair> {
         let len = conference.len();
-        let index_combinations: Vec<Vec<usize>> = (0..len).combinations(len / 2).collect();
+        let number_of_combinations = count_combinations(len, len / 2);
+        let mut index_combinations: Vec<Vec<usize>> = Vec::with_capacity(number_of_combinations);
+        for combo in (0..len).combinations(len / 2) {
+            index_combinations.push(combo);
+        }
         let mut map = AHashMap::with_capacity(index_combinations.len() / 2);
         let index_into = |i: usize| conference[i];
 
@@ -104,5 +116,9 @@ pub mod division_pair_map {
         }
 
         map.into_values().collect()
+    }
+
+    fn count_combinations(n: usize, r: usize) -> usize {
+        (1..=r).fold(1, |acc, val| acc * (n - val + 1) / val)
     }
 }
