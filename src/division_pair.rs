@@ -38,7 +38,7 @@ pub mod division_pair_set {
             indexes_combinations.push(combo);
         }
 
-        let mut set: AHashSet<Indexes> = AHashSet::with_capacity(number_of_combinations / 2);
+        let mut set = AHashSet::with_capacity(number_of_combinations / 2);
         for indexes in indexes_combinations {
             let compliment = (0..len as u32).filter(|i| !indexes.contains(i)).collect();
             set.insert(Indexes {

@@ -4,20 +4,22 @@ use best_cfb_divisions::find_closest_divisions;
 
 fn main() {
     let conference = [
-        "Brigham Young University",
-        "Iowa State University",
-        "Kansas State University",
-        "Oklahoma State University",
-        "Texas Christian University",
-        "Texas Tech University",
-        "University of Baylor",
-        "University of Central Florida",
-        "University of Cincinnati",
-        "University of Houston",
-        "University of Kansas",
-        "University of Oklahoma",
-        "University of Texas",
-        "University of West Virginia",
+        "Indiana University",
+        "Michigan State University",
+        "Northwestern University",
+        "Ohio State University",
+        "Pennsylvannia State University",
+        "Purdue University",
+        "Rutgers University",
+        "University of California, Los Angles",
+        "University of Illinois",
+        "University of Iowa",
+        "University of Maryland",
+        "University of Michigan",
+        "University of Minnesota",
+        "University of Nebraska",
+        "University of Southern California",
+        "University of Wisconsin",
     ];
     find_closest_divisions(&conference);
 }
