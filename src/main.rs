@@ -1,6 +1,4 @@
-mod script;
-
-use best_cfb_divisions::find_closest_divisions;
+use best_cfb_divisions::division::algorithm::find_closest_divisions;
 
 fn main() {
     let conference = [

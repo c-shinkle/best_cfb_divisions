@@ -92,6 +92,7 @@ pub mod division_pair_map {
     use ahash::AHashMap;
     use itertools::Itertools;
 
+    #[allow(dead_code)]
     pub fn get_all_division_pairs(conference: &Conference) -> Vec<DivisionPair> {
         let len = conference.len();
         let number_of_combinations = count_combinations(len, len / 2);
