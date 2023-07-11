@@ -44,12 +44,7 @@ mod test {
 
     #[test]
     fn sum_division_dist_in_random_order() {
-        let mut conference = vec![
-            "Indiana University",
-            "Michigan State University",
-            "Northwestern University",
-            "Ohio State University",
-        ];
+        let mut conference = vec!["Indiana", "Michigan State", "Northwestern", "Ohio State"];
         conference.shuffle(&mut thread_rng());
 
         let _ = find_closest_divisions(&conference);

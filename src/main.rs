@@ -1,23 +1,26 @@
-use best_cfb_divisions::division::algorithm::find_closest_divisions;
+#[allow(unused_imports)]
+use best_cfb_divisions::{
+    division::algorithm::find_closest_divisions, pod::algorithm::find_closest_pods,
+};
 
 fn main() {
     let conference = [
-        "Indiana University",
-        "Michigan State University",
-        "Northwestern University",
-        "Ohio State University",
-        "Pennsylvannia State University",
-        "Purdue University",
-        "Rutgers University",
-        "University of California, Los Angles",
-        "University of Illinois",
-        "University of Iowa",
-        "University of Maryland",
-        "University of Michigan",
-        "University of Minnesota",
-        "University of Nebraska",
-        "University of Southern California",
-        "University of Wisconsin",
+        "Indiana",
+        "Michigan State",
+        "Northwestern",
+        "Ohio State",
+        "Penn State",
+        "Purdue",
+        "Rutgers",
+        "UCLA",
+        "Illinois",
+        "Iowa",
+        "Maryland",
+        "Michigan",
+        "Minnesota",
+        "Nebraska",
+        "USC",
+        "Wisconsin",
     ];
-    find_closest_divisions(&conference);
+    find_closest_pods(&conference);
 }
