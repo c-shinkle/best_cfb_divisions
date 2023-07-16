@@ -4,11 +4,9 @@ use std::collections::HashMap;
 
 use super::combo::get_all_pod_combinations;
 use crate::distance_lookup_table::create_lookup_table;
+use crate::pod::combo::Pod;
 use crate::pod::distance::PodDistance;
-use crate::pod::PodTuple;
 use crate::types::*;
-
-use super::Pod;
 
 pub fn find_closest_pods<const POD_COUNT: usize>(conference: &Conference) {
     assert!(
@@ -19,9 +17,9 @@ pub fn find_closest_pods<const POD_COUNT: usize>(conference: &Conference) {
     let lookup_table = create_lookup_table();
     let distance = all_pod_quadruples
         .into_par_iter()
-        .map(|pods: PodTuple<POD_COUNT>| {
+        .map(|pods| {
             let distance = (0..POD_COUNT)
-                .map(|i| sum_pod_dist(&pods.0[i], &lookup_table))
+                .map(|i| sum_pod_dist(&pods[i], &lookup_table))
                 .sum::<u32>()
                 / POD_COUNT as u32;
             PodDistance::new(distance, pods)

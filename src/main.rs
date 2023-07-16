@@ -26,6 +26,8 @@ fn main() {
     // find_closest_pods::<4>(&conference);
     let all_pod_combos = get_all_pod_combinations::<3>(&conference);
     for combo in all_pod_combos {
-        println!("{}", combo);
+        for (i, pod) in combo.into_iter().enumerate() {
+            println!("Pod {}: {:?}", i + 1, pod);
+        }
     }
 }
