@@ -1,7 +1,7 @@
 use std::cmp::Ordering;
 use std::fmt::{Display, Formatter, Result};
 
-use crate::types::Division;
+use crate::division::Division;
 
 #[derive(Clone, Eq, PartialEq)]
 pub struct DivisionDistance {

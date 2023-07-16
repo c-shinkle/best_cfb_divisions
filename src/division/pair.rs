@@ -1,4 +1,5 @@
 pub mod division_pair_set {
+    use crate::division::DivisionPair;
     use crate::types::*;
     use ahash::AHashSet;
     use itertools::Itertools;
@@ -66,7 +67,7 @@ pub mod division_pair_set {
     mod test {
         use std::collections::HashSet;
 
-        use crate::types::DivisionPair;
+        use crate::division::DivisionPair;
 
         use super::get_all_division_pairs;
 
@@ -88,6 +89,7 @@ pub mod division_pair_set {
 }
 
 pub mod division_pair_map {
+    use crate::division::DivisionPair;
     use crate::types::*;
     use ahash::AHashMap;
     use itertools::Itertools;

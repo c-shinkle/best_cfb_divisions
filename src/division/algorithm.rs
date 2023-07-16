@@ -1,5 +1,6 @@
 use super::distance::DivisionDistance;
 use super::pair::division_pair_set::get_all_division_pairs;
+use super::Division;
 use crate::distance_lookup_table::create_lookup_table;
 use crate::types::*;
 use itertools::Itertools;

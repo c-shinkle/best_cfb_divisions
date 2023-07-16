@@ -1,39 +1,38 @@
 use std::cmp::Ordering;
 use std::fmt::{Display, Formatter, Result};
 
-use crate::types::*;
+use super::PodTuple;
 
 #[derive(Clone, Eq, PartialEq)]
-pub struct PodDistance {
+pub struct PodDistance<const N: usize> {
     distance: u32,
-    pods: PodQuadruple,
+    pods: PodTuple<N>,
 }
 
-impl PodDistance {
-    pub fn new(distance: u32, pods: PodQuadruple) -> PodDistance {
+impl<const N: usize> PodDistance<N> {
+    pub fn new(distance: u32, pods: PodTuple<N>) -> PodDistance<N> {
         PodDistance { distance, pods }
     }
 }
 
-impl PartialOrd for PodDistance {
+impl<const N: usize> PartialOrd for PodDistance<N> {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         self.distance.partial_cmp(&other.distance)
     }
 }
 
-impl Ord for PodDistance {
+impl<const N: usize> Ord for PodDistance<N> {
     fn cmp(&self, other: &Self) -> Ordering {
         self.distance.cmp(&other.distance)
     }
 }
 
-impl Display for PodDistance {
+impl<const N: usize> Display for PodDistance<N> {
     fn fmt(&self, f: &mut Formatter) -> Result {
         writeln!(f, "Distance: {}", self.distance)?;
-        writeln!(f, "First Pod: {:?}", self.pods.0)?;
-        writeln!(f, "Second Pod: {:?}", self.pods.1)?;
-        writeln!(f, "Third Pod: {:?}", self.pods.2)?;
-        writeln!(f, "Fourth Pod: {:?}", self.pods.3)?;
+        for i in 0..N {
+            writeln!(f, "Pod {i}: {:?}", self.pods.0[i])?;
+        }
         Result::Ok(())
     }
 }
