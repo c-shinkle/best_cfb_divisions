@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 use crate::types::TeamPair;
 
+#[macro_export]
 macro_rules! collection {
   // map-like
   ($($k:expr => $v:expr),* $(,)?) => {{

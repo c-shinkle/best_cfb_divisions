@@ -1,6 +1,6 @@
-use best_cfb_divisions::pod::algorithm::find_closest_pods;
+use best_cfb_divisions::pod::algorithm::find_best_two_play_opponents;
 #[allow(unused_imports)]
-use best_cfb_divisions::pod::combo::get_all_pod_combinations;
+use best_cfb_divisions::pod::combo::get_all_combinations_two_play_opponents;
 #[allow(unused_imports)]
 use std::fs::File;
 #[allow(unused_imports)]
@@ -8,24 +8,24 @@ use std::io::Write;
 
 fn main() {
     let conference = [
+        "Illinois",
         "Indiana",
+        "Iowa",
+        "Maryland",
         "Michigan State",
+        "Michigan",
+        "Minnesota",
+        "Nebraska",
         "Northwestern",
         "Ohio State",
         "Penn State",
         "Purdue",
         "Rutgers",
         "UCLA",
-        "Illinois",
-        "Iowa",
-        "Maryland",
-        "Michigan",
-        // "Minnesota",
-        // "Nebraska",
-        // "USC",
-        // "Wisconsin",
+        "USC",
+        "Wisconsin",
     ];
-    find_closest_pods::<3>(&conference);
+    find_best_two_play_opponents(&conference);
     // let mut file = File::create("./all_three_pod_combos.txt").unwrap();
     // let all_pod_combos = get_all_pod_combinations::<3>(&conference);
     // for combo in all_pod_combos {
